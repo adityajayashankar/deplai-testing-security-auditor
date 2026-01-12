@@ -14,15 +14,15 @@ oauth = OAuth()
 
 oauth.register(
     name="github",
-    client_id=settings.GITHUB_CLIENT_ID,
-    client_secret=settings.GITHUB_CLIENT_SECRET,
+    client_id=settings.github_client_id,
+    client_secret=settings.github_client_secret,
     access_token_url="https://github.com/login/oauth/access_token",
     authorize_url="https://github.com/login/oauth/authorize",
     api_base_url="https://api.github.com/",
     client_kwargs={"scope": "user:email"},
 )
 
-JWT_SECRET = settings.JWT_SECRET
+JWT_SECRET = settings.jwt_secret
 
 
 @router.get("/auth/github/login")
@@ -60,7 +60,7 @@ async def github_callback(request: Request):
 
     payload = {
         "sub": str(user.id),
-        "exp": datetime.utcnow() + timedelta(hours=12),
+        "exp": datetime.utcnow() + timedelta(minutes=1),
     }
 
     access_token = jwt.encode(payload, JWT_SECRET, algorithm="HS256")
